@@ -6,7 +6,7 @@
       class="absolute"
     />
     <div v-if="transactions.length" class="transaction-rows-outer-container">
-      <div v-if="transactions.length" class="transaction-rows-inner-container">
+      <div class="transaction-rows-inner-container">
         <TransactionRow
           v-for="transaction in transactionsList"
           :key="transaction.transactionInfo.hash"

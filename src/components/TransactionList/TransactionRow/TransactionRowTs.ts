@@ -35,7 +35,7 @@ import ActionDisplay from '@/components/ActionDisplay/ActionDisplay.vue'
 import networkConfig from '@/../config/network.conf.json'
 
 // resources
-import {transactionTypeToIcon, officialIcons} from '@/views/resources/Images'
+import {transactionTypeToIcon, officialIcons, dashboardImages} from '@/views/resources/Images'
 
 @Component({
   components: {
@@ -43,13 +43,38 @@ import {transactionTypeToIcon, officialIcons} from '@/views/resources/Images'
     ActionDisplay,
     MosaicAmountDisplay,
   },
-  computed: {...mapGetters({networkMosaic: 'mosaic/networkMosaic'})},
+  computed: {...mapGetters({
+    networkMosaic: 'mosaic/networkMosaic',
+    confirmedTransactions: 'wallet/confirmedTransactions',
+    partialTransactions: 'wallet/partialTransactions',
+    unconfirmedTransactions: 'wallet/unconfirmedTransactions',
+  })},
 })
 export class TransactionRowTs extends Vue {
 
   @Prop({
     default: [],
   }) transaction: Transaction
+
+  /**
+   * List of confirmed transactions (per-request)
+   * @var {Transaction[]}
+   */
+  public confirmedTransactions: Transaction[]
+
+  /**
+   * List of unconfirmed transactions (websocket only)
+   * @see {Store.Wallet}
+   * @var {Transaction[]}
+   */
+  public unconfirmedTransactions: Transaction[]
+
+  /**
+   * List of confirmed transactions (websocket only)
+   * @see {Store.Wallet}
+   * @var {Transaction[]}
+   */
+  public partialTransactions: Transaction[]
 
   /**
    * Transaction service
@@ -100,20 +125,26 @@ export class TransactionRowTs extends Vue {
    * @return {string}
    */
   public getIcon() {
-    // - read per-transaction-type details@
-    const view = this.view
+    if (this.transaction.isConfirmed()) {
+      // - read per-transaction-type details@
+      const view = this.view
 
-    // - transfers have specific incoming/outgoing icons
-    if (view.transaction.type === this.transactionType.TRANSFER) {
-      return view.values.get('isIncoming')
-        ? officialIcons.incoming
-        : officialIcons.outgoing
-    }
+      // - transfers have specific incoming/outgoing icons
+      if (view.transaction.type === this.transactionType.TRANSFER) {
+        return view.values.get('isIncoming')
+          ? officialIcons.incoming
+          : officialIcons.outgoing
+      }
 
-    // - otherwise use per-type icon
-    return transactionTypeToIcon[view.transaction.type]
+      // - otherwise use per-type icon
+      return transactionTypeToIcon[view.transaction.type]
+    } else {
+      return this.getTransactionStatusIcon()
+    }    
   }
-
+  public getTransactionStatusIcon(): string{
+    return dashboardImages.dashboardUnconfirmed
+  }
   /**
    * Returns true if \a transaction is an incoming transaction
    * @return {boolean}
@@ -140,7 +171,23 @@ export class TransactionRowTs extends Vue {
    * @param transaction 
    */
   public getHeight(): string {
-    return this.view.info?.height.compact().toLocaleString()
+    if(this.transactionStatus === 'partial'){
+      return 'partial'
+    }else{
+      return this.view.info?.height.compact().toLocaleString()
       || this.$t('unconfirmed').toString()
+    }
+  }
+  public get transactionStatus() {
+    if (this.transaction.isConfirmed()) {
+      return 'confirmed'
+    } else {
+      if (this.partialTransactions.length > 0 &&
+         this.partialTransactions.some((item) => item.transactionInfo.hash === this.transaction.transactionInfo.hash)) {
+        return 'partial'
+      } else {
+        return 'unconfirmed'
+      }
+    }
   }
 }

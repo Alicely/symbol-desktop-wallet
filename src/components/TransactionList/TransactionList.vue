@@ -8,16 +8,16 @@
           class="transaction-list-tabs"
           @input="onTabChange"
         >
-          <TabPane
+          <!--      <TabPane
             :label="$t('transactions_tab_confirmed')"
             :tab="'confirmed'"
             :name="'confirmed'"
             :icon="''"
             class="transaction-tab-inner-container"
             @input="currentTab = 'confirmed'"
-          >
-            <!-- Confirmed transactions tab -->
-            <TransactionTable
+          > -->
+          <!-- Confirmed transactions tab -->
+          <!--         <TransactionTable
               :transactions="getCurrentPageTransactions('confirmed')"
               :empty-message="'no_confirmed_transactions'"
               @click="onClickTransaction"
@@ -29,9 +29,9 @@
             :name="'unconfirmed'"
             :icon="''"
             @input="currentTab = 'unconfirmed'"
-          >
-            <!-- Unconfirmed transactions tab -->
-            <TransactionTable
+          > -->
+          <!-- Unconfirmed transactions tab -->
+          <!-- <TransactionTable
               :transactions="getCurrentPageTransactions('unconfirmed')"
               :empty-message="'no_unconfirmed_transactions'"
               @click="onClickTransaction"
@@ -43,15 +43,21 @@
             :name="'partial'"
             :icon="''"
             @input="currentTab = 'partial'"
-          >
-            <!-- Partial transactions tab -->
-            <TransactionTable
+          > -->
+          <!-- Partial transactions tab -->
+          <!-- <TransactionTable
               :transactions="getCurrentPageTransactions('partial')"
               :empty-message="'no_partial_transactions'"
               @click="onClickTransaction"
             />
-          </TabPane>
-          <TransactionListOptions slot="extra" :current-tab="currentTab" />
+          </TabPane> -->
+          <TransactionTable
+            :transactions="getCurrentPageTransactions('all')"
+            :empty-message="'no_confirmed_transactions'"
+            @click="onClickTransaction"
+          />
+          <!-- hide the refresh button for the time being -->
+          <!--  <TransactionListOptions slot="extra" :current-tab="currentTab" /> -->
         </Tabs>
       </div>
       <div class="transaction-list-pagination-container">

@@ -35,7 +35,7 @@ import TransactionListOptions from '@/components/TransactionListOptions/Transact
 import TransactionTable from '@/components/TransactionList/TransactionTable/TransactionTable.vue'
 
 // custom types
-type TabName = 'confirmed' | 'unconfirmed' | 'partial'
+type TabName = 'confirmed' | 'unconfirmed' | 'partial' | 'all'
 
 @Component({
   components: {
@@ -209,10 +209,18 @@ export class TransactionListTs extends Vue {
    * @returns {Transaction[]}
    */
   public getCurrentTabTransactions(tabName: TabName): Transaction[] {
-    if (tabName === 'confirmed') return this.confirmedTransactions || []
-    if (tabName === 'unconfirmed') return this.unconfirmedTransactions || []
-    if (tabName === 'partial') return this.partialTransactions || []
-    return []
+    switch (tabName) {
+      case 'confirmed':
+        return this.confirmedTransactions
+      case 'unconfirmed':
+        return this.unconfirmedTransactions
+      case 'partial':
+        return this.partialTransactions
+      case 'all':
+        return [ ...this.confirmedTransactions,...this.unconfirmedTransactions,...this.partialTransactions ]
+      default:
+        return []
+    }
   }
 
   public get hasDetailModal(): boolean {
