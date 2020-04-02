@@ -21,9 +21,10 @@ import {AbstractService} from './AbstractService'
 import {MosaicsRepository} from '@/repositories/MosaicsRepository'
 import {MosaicsModel} from '@/core/database/entities/MosaicsModel'
 import {NamespaceService} from './NamespaceService'
+import { TimeHelpers } from '@/core/utils/TimeHelpers'
 
 // custom types
-export type ExpirationStatus = 'unlimited' | 'expired' | string
+export type ExpirationStatus = 'unlimited' | 'expired' | string | number
 
 export interface AttachedMosaic {
   id: MosaicId | NamespaceId
@@ -78,10 +79,10 @@ export class MosaicService extends AbstractService {
    * @param {Mosaic[] | MosaicInfo[]} mosaics Mosaics to create / refresh in the database
    * @param {boolean} [forceUpdate=false]     Option to bypass the cache
    */
-  public refreshMosaicModels(
+  public async refreshMosaicModels(
     mosaics: Mosaic[] | MosaicInfo[],
     forceUpdate = false,
-  ): void {
+  ) {
     // @ts-ignore
     const mosaicIds = mosaics.map(mosaic => mosaic.id)
 
@@ -90,7 +91,7 @@ export class MosaicService extends AbstractService {
 
     // if force update is selected, fetch info for all mosaics
     if (forceUpdate) {
-      this.fetchMosaicsInfos(mosaicIds as MosaicId[])
+      await this.fetchMosaicsInfos(mosaicIds as MosaicId[])
       return
     }
 
@@ -412,7 +413,7 @@ export class MosaicService extends AbstractService {
     if (expiresIn <= 0) return 'expired'
 
     // number of blocks remaining
-    return expiresIn.toLocaleString()
+    return TimeHelpers.durationToRelativeTime(expiresIn)
   }
 
   /**

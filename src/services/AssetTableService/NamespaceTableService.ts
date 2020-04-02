@@ -41,8 +41,8 @@ export class NamespaceTableService extends AssetTableService {
       {name: 'name', label: 'table_header_name'},
       {name: 'expiration', label: 'table_header_expiration'},
       {name: 'expired', label: 'table_header_expired'},
-      {name: 'aliasIdentifier', label: 'table_header_alias_identifier'},
       {name: 'aliasType', label: 'table_header_alias_type'},
+      {name: 'aliasIdentifier', label: 'table_header_alias_identifier'},
     ]
   }
 
@@ -67,8 +67,8 @@ export class NamespaceTableService extends AssetTableService {
         'name': model.values.get('name'),
         'expiration': expiration,
         'expired': expired,
-        'aliasIdentifier': this.getAliasIdentifier(namespaceInfo),
         'aliasType': this.getAliasType(namespaceInfo),
+        'aliasIdentifier': this.getAliasIdentifier(namespaceInfo),
       }
     }).filter(x => x) // filter out namespaces that are not yet available
   }
@@ -98,11 +98,11 @@ export class NamespaceTableService extends AssetTableService {
 
   /**
    * Returns a view of a namespace expiration info
-   * @private
+   * @public
    * @param {NamespaceInfo} mosaicInfo
    * @returns {string}
    */
-  private getExpiration (
+  public getExpiration (
     namespaceInfo: NamespaceInfo,
   ): {expiration: string, expired: boolean} {
     const {currentHeight} = this

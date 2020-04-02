@@ -826,8 +826,8 @@
   "duration_blocks": "持续时间 (块)",
   "mosaics": "马赛克",
   "mosaics_list": "马赛克列表",
-  "table_header_hex_id": "马赛克id",
-  "table_header_name": "名称",
+  "table_header_hex_id": "ID",
+  "table_header_name": "别名",
   "table_header_supply": "可供应量",
   "table_header_balance": "剩余数量",
   "table_header_divisibility": "可分割性",
@@ -1016,5 +1016,13 @@
   "approval_greater_than_cosignatories": "最小批准所需余项比可用余项多 {delta}。请添加余数或减少最小批准号。",
   "removal_greater_than_cosignatories": "最小删除所需余弦比可用余弦多{delta}。请添加余弦或减少最小删除数。",
   "page_title_transfer": "转账",
-  "mnemonic_copy":"复制"
+  "mnemonic_copy":"复制",
+  "show_expired_mosaic":"显示过期马赛克",
+  "refresh_success":"刷新成功",
+  "refresh_failed":"刷新失败",
+  "create_sub_namespace":"创建子命名空间",
+  "rules_describe":"规则描述",
+  "Estimated_period_of_validity":"预估有效期",
+  "no_data_namespace_tips":"您还没有父命名空间，请先创建一个父命名空间",
+  "current_validity":"当前有效期"
 }
